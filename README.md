@@ -1,4 +1,4 @@
-# PyStack Week 11
+# PyStack Week 11 - Falta terminar...
 
 Bem-vindo ao repositório do **PyStack Week 11**! Este repositório contém todos os códigos do projeto desenvolvidos durante a semana de aprendizado intensivo organizada pela Pythonando.com.br.
 
