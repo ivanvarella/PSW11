@@ -13,6 +13,58 @@ from django.db.models import Sum
 from django.db.models import Sum
 from django.db.models import Sum
 
+# Para o Dashboard
+from django.utils import timezone
+from datetime import timedelta
+
+
+def dashboard(request, id):
+
+    if not request.user.is_authenticated:
+        return redirect("/usuarios/logar")
+
+    empresa = Empresas.objects.get(id=id)
+    today = timezone.now().date()
+
+    seven_days_ago = today - timedelta(days=6)
+
+    propostas_por_dia = {}
+    # Exemplo da etrutura do dicionário à ser criado:
+    # {'14/08/2024: 200, '15/05/2024': 10}
+
+    for i in range(7):
+        day = seven_days_ago + timedelta(days=i)
+
+        propostas = PropostaInvestimento.objects.filter(
+            empresa=empresa, status="PA", data=day
+        )
+
+        total_dia = 0
+        for proposta in propostas:
+            total_dia += proposta.valor
+
+        # Passando a chave e obtendo o valor de cada posicao
+        propostas_por_dia[day.strftime("%d/%m/%Y")] = int(total_dia)
+
+    # for dia, total in propostas_por_dia.items():
+    #     print(f"Data: {dia},  Total de Propostas: {total}")
+
+    """ Forma mais otimizada e avançada """
+    """ 
+    seven_days_ago = today - timedelta(days=6)
+    propostas_por_dia = (PropostaInvestimento.objects.filter(empresa=empresa, status="PA", data__date__range=[seven_days_ago, today]).annotate(total=TruncDay("data")).values("data").annotate(total=Count("id")).order_by("data"))
+    
+    print(propostas_por_dia)
+    """
+    return render(
+        request,
+        "dashboard.html",
+        {
+            "labels": list(propostas_por_dia.keys()),
+            "data": list(propostas_por_dia.values()),
+        },
+    )
+
 
 # Create your views here.
 def cadastrar_empresa(request):
@@ -80,11 +132,21 @@ def listar_empresas(request):
         return redirect("/usuarios/logar")
 
     if request.method == "GET":
-
         # ToDo: Realizar os filtros das empresas
-
+        nome_empresa = request.GET.get("empresa")
         empresas = Empresas.objects.filter(user=request.user)
-        return render(request, "listar_empresas.html", {"empresas": empresas})
+
+        if nome_empresa:
+            # __icontains -> Que contenha qualquer parte do nome, se usasse somente:
+            # nome = nome_empresa, o nome_empresa teria que ser exatamente igual para
+            # conseguir filtrar.
+            empresas = empresas.filter(nome__icontains=nome_empresa)
+
+        return render(
+            request,
+            "listar_empresas.html",
+            {"empresas": empresas, "nome_empresa": nome_empresa},
+        )
 
 
 # Além do request, tem que receber o id, que estará no link da página anterior (via GET)

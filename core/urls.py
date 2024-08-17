@@ -26,10 +26,18 @@ from django.conf.urls.static import (
     static,
 )  # Esse é aquele static lá que eu ainda não entendi muito - pesquisar mais...
 
+from django.shortcuts import redirect
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("usuarios/", include("usuarios.urls")),
     path("empresarios/", include("empresarios.urls")),
     path("investidores/", include("investidores.urls")),
+    # Nesse caso, nãe está sendo feito uma rota, está sendo redirecionado usando o lambda, ou seja,
+    # sempre que for acessado "", é executado o lambda, que por sua vez executa o método redirect().
+    # Utiliza o request do usuário.
+    path(
+        "", lambda request: redirect("/empresa/cadatrar_empresa")
+    ),  # Home -> Cadastrar Empresa
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

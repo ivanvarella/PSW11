@@ -13,4 +13,5 @@ urlpatterns = [
         views.gerenciar_proposta,
         name="gerenciar_proposta",
     ),
+    path("dashboard/<int:id>", views.dashboard, name="dashboard"),
 ]

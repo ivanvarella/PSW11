@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 
 # Importar os selects dos models
-from empresarios.models import Empresas, Documento
+from empresarios.models import Empresas, Documento, Metricas
 from .models import PropostaInvestimento
 
 
@@ -83,6 +83,8 @@ def ver_empresa(request, id):
     percentual_disponivel = empresa.percentual_equity - percentual_vendido
 
     # ToDo: Listar as métricas dinamicamente
+    metricas = Metricas.objects.filter(empresa=empresa)
+
     return render(
         request,
         "ver_empresa.html",
@@ -92,6 +94,7 @@ def ver_empresa(request, id):
             "percentual_vendido": int(percentual_vendido),
             "concretizado": concretizado,
             "percentual_disponivel": percentual_disponivel,
+            "metricas": metricas,
         },
     )
 

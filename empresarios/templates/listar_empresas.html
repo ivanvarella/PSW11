@@ -16,7 +16,7 @@
             <div class="col-md-4">
                 <form action="{% url 'listar_empresas' %}" method="GET">
                 <label>Empresa</label>
-                <input type="text" name="empresa" class="form-control" placeholder="Busque por uma empresa em específico">
+                <input type="text" name="empresa" class="form-control" placeholder="Busque por uma empresa em específico" {% if nome_empresa %} value="{{nome_empresa}} {% endif %}">
             </div>
             <div class="col-md">
                 <br>
