@@ -35,6 +35,8 @@ def dashboard(request, id):
     for i in range(7):
         day = seven_days_ago + timedelta(days=i)
 
+        # print(f"Dia que será comparado com a data do banco: {day}")
+
         propostas = PropostaInvestimento.objects.filter(
             empresa=empresa, status="PA", data=day
         )
@@ -56,12 +58,14 @@ def dashboard(request, id):
     
     print(propostas_por_dia)
     """
+
     return render(
         request,
         "dashboard.html",
         {
             "labels": list(propostas_por_dia.keys()),
             "data": list(propostas_por_dia.values()),
+            "empresa": empresa.id,
         },
     )
 

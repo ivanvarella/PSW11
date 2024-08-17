@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import datetime
 
 
 # Importar Empresas
@@ -23,7 +24,7 @@ class PropostaInvestimento(models.Model):
     status = models.CharField(max_length=2, choices=status_choices, default="AS")
     selfie = models.FileField(upload_to="selfie", null=True, blank=True)
     rg = models.FileField(upload_to="rg", null=True, blank=True)
-    # data = models.DateTimeField(auto_now_add=True)
+    data = models.DateField(auto_now_add=True)  # Alterado para DateField
 
     def __str__(self):
         return str(self.valor)

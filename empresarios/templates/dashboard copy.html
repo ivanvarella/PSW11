@@ -9,11 +9,13 @@
 
   <br><br>
   <div class="container">
-    <a class="btn btn-primary" href="{% url 'empresa' empresa  %}" role="button">Voltar</a>
     <p class="display-6"> Proposta aceitas nos últimos 7 dias </p>
     <br>
     <canvas id="myChart"></canvas>
   </div>
+
+
+
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -26,7 +28,7 @@
         labels: {{labels|safe}},
         datasets: [{
           label: 'Investimento recebido',
-          data: {{data|safe}},
+          data: {{values|safe}},
           borderWidth: 1
         }]
       },
